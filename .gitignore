@@ -71,8 +71,6 @@ venv.bak/
 *.sln
 *.sw?
 
-# Files
-*.jpg
-*.png 
+# Files 
 
 .DS_Store
