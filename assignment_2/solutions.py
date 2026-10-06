@@ -34,6 +34,42 @@ def copy(image, emptyPictureArray):
 
     return emptyPictureArray
 
+"""Grayscale"""
+def grayscale(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    return gray
+
+"""HSV"""
+def hsv(image):
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    return hsv
+
+"""Color shifting"""
+def hue_shifted(image, emptyPictureArray, hue):
+    height, width, channels = image.shape
+
+    for y in range(height):
+        for x in range(width):
+            for c in range(channels):
+                emptyPictureArray[y, x, c] = (int(image[y, x, c]) + hue) % 256
+
+    return emptyPictureArray
+
+"""Smoothing"""
+def smoothing(image):
+    smoothed_image = cv2.GaussianBlur(image, ksize=(15, 15), sigmaX=0, borderType=cv2.BORDER_REFLECT)
+    return smoothed_image
+
+"""Rotation"""
+def rotate(image, rotation_angle):
+    """if rotate = 90, else rotate = 180"""
+    if rotation_angle == 90:
+        rotated_image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+    else:
+        rotated_image = cv2.rotate(image, cv2.ROTATE_180)
+
+    return rotated_image
+
 if __name__ == "__main__":
     image = cv2.imread("iris-1.jpg")
     padded_image = padding(image, border_width=100)
@@ -58,4 +94,20 @@ if __name__ == "__main__":
     copied_image = copy(image, emptyPictureArray)
     cv2.imwrite("copied_image.png", copied_image)
 
+    grayscaled_image = grayscale(image)
+    cv2.imwrite("grayscaled_image.png", grayscaled_image)
 
+    hsv_image = hsv(image)
+    cv2.imwrite("hsv_image.png", hsv_image)
+
+    emptyPictureArray_hue = np.zeros((height, width, 3), dtype=np.uint8)
+    hue_shifted_image = hue_shifted(image, emptyPictureArray_hue, hue=50)
+    cv2.imwrite("hue_shifted_image.png", hue_shifted_image)
+
+    smoothed_image = smoothing(image)
+    cv2.imwrite("smoothed_image.png", smoothed_image)
+
+    rotated_image90 = rotate(image, 90)
+    cv2.imwrite("rotated_image90.png", rotated_image90)
+    rotated_image180 = rotate(image, 180)
+    cv2.imwrite("rotated_image180.png", rotated_image180)
